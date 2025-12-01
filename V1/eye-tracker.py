@@ -1,4 +1,5 @@
 import cv2
+# Simple testing using small amounts of data and haar cascade. 
 video = cv2.VideoCapture("/dev/video0", cv2.CAP_V4L2)
 print("Video Active:", video.isOpened())
 eye_cascade = cv2.CascadeClassifier("eye_data.xml")
