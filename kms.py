@@ -13,7 +13,7 @@ with open(modelNames, "rt") as f:
 model = cv2.dnn_DetectionModel(modelWeights, modelConfig)
 model.setInputParams(1.0 / 127.5, (320, 320), (127.5, 127.5, 127.5), True)
 def angle(rads):
-    conversion = (2000 / math.pi) * abs(rads)
+    conversion = (2000 / math.pi) * rads
     if (conversion >= 500 and conversion <= 2500):
         return conversion + 500
 while True:
