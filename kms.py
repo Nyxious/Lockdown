@@ -13,8 +13,9 @@ with open(modelNames, "rt") as f:
 model = cv2.dnn_DetectionModel(modelWeights, modelConfig)
 model.setInputParams(1.0 / 127.5, (320, 320), (127.5, 127.5, 127.5), True)
 def angle(rads):
+    rads = rads + (math.pi /2)
     conversion = (2000 / math.pi) * rads
-    if (conversion >= 500 and conversion <= 2500):
+    if (conversion >= 500 and conversion <= 2000):
         return conversion + 500
 while True:
     success, frame = video.read()
