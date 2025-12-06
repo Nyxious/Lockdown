@@ -14,9 +14,9 @@ model = cv2.dnn_DetectionModel(modelWeights, modelConfig)
 model.setInputParams(1.0 / 127.5, (320, 320), (127.5, 127.5, 127.5), True)
 def angle(rads):
     rads = rads + (math.pi /2)
-    conversion = (2000 / math.pi) * rads
+    conversion = (2000 / math.pi) * rads + 500
     if (conversion >= 500 and conversion <= 2000):
-        return conversion + 500
+        return conversion
 while True:
     success, frame = video.read()
     classIds, confidence, box = model.detect(frame, confThreshold=0.7, nmsThreshold=0.7)
