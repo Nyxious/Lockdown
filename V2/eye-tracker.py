@@ -6,6 +6,7 @@ modelConfig = "/home/pi/Downloads/modelFiles/mobileNetV3.pbtxt"
 modelNames = "/home/pi/Downloads/modelFiles/coco.names"
 nameArray = []
 focalLen = 32
+servoId = 22
 video = cv2.VideoCapture("/dev/video0", cv2.CAP_V4L2)
 pi = pigpio.pi()
 with open(modelNames, "rt") as f:
@@ -18,23 +19,13 @@ def getAngleConversion(rads):
     return conversion
 while True:
     success, frame = video.read()
-    classIds, confidence, box = model.detect(frame, confThreshold=0.6, nmsThreshold=0.7)
-    print(len(classIds)) # Testing to check if theres anything inside of the classIds array
-    if (len(classIds) > 0):
-    
-        for (objectId, c) in zip(classIds.flatten(), box):
-            
-            print(nameArray[objectId - 1]) # Prints the object detected using the coco list
-            if (nameArray[objectId - 1] == "person"):
-                #new2
-                coordinateX, widthCenter = (c[0] + (c[2]/2)), frame.shape[1] // 2
-                print(coordinateX, widthCenter)
-                angle = getAngleConversion(math.atan((coordinateX - widthCenter) / focalLen))
-                print(angle)
-                pi.set_servo_pulsewidth(22, angle)
-                cv2.imwrite(nameArray[objectId - 1]+".jpg", frame)
-                
-                break
-            
     if not success:
         break
+    classIds, confidence, box = model.detect(frame, confThreshold=0.6, nmsThreshold=0.7)
+    if (len(classIds) > 0):
+        for (objectId, c) in zip(classIds.flatten(), box):
+            if (nameArray[objectId - 1] == "person"):
+                coordinateX, widthCenter = (c[0] + (c[2]/2)), frame.shape[1] // 2
+                angle = getAngleConversion(math.atan((coordinateX - widthCenter) / focalLen))
+                pi.set_servo_pulsewidth(servoId, angle)
+                break
